@@ -1,0 +1,53 @@
+MODEL:
+  PRETRAIN_CHOICE: 'imagenet' # imagenet
+  PRETRAIN_PATH: "/home/nihao/data/checkpoints" # root of pretrain path
+  METRIC_LOSS_TYPE: 'triplet_center' # triplet, triplet_center
+  DIM: 2048
+  IF_LABELSMOOTH: 'on'
+  NAME: 'mix_ibnnet50b' # vit, resnet50, mix_vit, mix_resnet, mix_ibnnet50a, mix_ibnnet50b
+  NO_MARGIN: True
+  DEVICE_ID: ('2')
+  TRANSFORMER_TYPE: 'vit_base_patch16_224_TransReID'
+  STRIDE_SIZE: 16
+  DROP_PATH: 0.1
+
+INPUT:
+  SIZE_TRAIN: [256,128]
+  SIZE_TEST: [256,128]
+  PIXEL_MEAN: [0.5, 0.5, 0.5]
+  PIXEL_STD: [0.5, 0.5, 0.5]
+
+DATASETS:
+  TRAIN: ('DG_Market1501', 'DG_CUHK02', 'DG_CUHK03_detected', 'DG_CUHK_SYSU',)
+  TEST: ("DG_GRID", "DG_VIPeR", "DG_PRID", "DG_iLIDS", )
+  ROOT_DIR: ('/home/nihao/data') # root of datasets
+
+DATALOADER:
+  SAMPLER: 'SHS' # softmax_triplet, single_domain, SHS
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 8
+  CAMERA_TO_DOMAIN: True
+
+SOLVER:
+  OPTIMIZER_NAME: 'SGD'
+  MAX_EPOCHS: 60
+  BASE_LR: 0.001
+  IMS_PER_BATCH: 64
+  LARGE_FC_LR: False
+  LOG_PERIOD: 60
+  EVAL_PERIOD: 1
+  WEIGHT_DECAY:  1e-4
+  WEIGHT_DECAY_BIAS: 1e-4
+  BIAS_LR_FACTOR: 2
+  SEED: 1234
+
+TEST:
+  EVAL: True
+  IMS_PER_BATCH: 256
+  RE_RANKING: False
+  NECK_FEAT: 'before'
+  FEAT_NORM: True
+
+LOG_ROOT: '/home/nihao/data/exp/' # root of log file
+TB_LOG_ROOT: './tb_log/'
+LOG_NAME: 'debug'
