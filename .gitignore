@@ -1,7 +1,6 @@
 __pycache__
 tb_log
 .vscode
-*.yml
 vis
 visualize
 visualization
