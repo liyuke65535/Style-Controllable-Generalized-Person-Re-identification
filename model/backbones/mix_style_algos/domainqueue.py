@@ -128,58 +128,8 @@ class DomainQueue(nn.Module):
             else:
                 ranges[i] = self.sum[d] % self.syn_capacity
         f_ind1 = torch.tensor([random.randint(0, ranges[i]) for i in range(B)])
-        # f_ind2 = torch.tensor([random.randint(0, ranges[i]) for i in range(B)])
         mu1 = self.mean_queue[d_ind1, f_ind1].unsqueeze(1)
         sig1 = self.sig_queue[d_ind1, f_ind1].unsqueeze(1)
-        # mu2 = self.mean_queue[d_ind2, f_ind2].unsqueeze(1)
-        # sig2 = self.sig_queue[d_ind2, f_ind2].unsqueeze(1)
-
-        # #### part into groups, each group adopts the same mix operation (single domain in batches only)
-        # mix_num = 16
-        # repeat_times = B // mix_num
-        # lmda = self.beta.sample((mix_num,1,1)).repeat(repeat_times,1,1).to(x.device)
-        # d_ind1 = random.choices(range(1, self.num_domains), k=mix_num)
-        # d_ind1 = torch.tensor(d_ind1, device=domain.device)
-        # # d_ind1 = torch.tensor(d_ind1, device=domain.device) + torch.unique(domain)
-        # # d_ind1 = d_ind1 % self.num_domains
-        # d_ind1 = d_ind1.unsqueeze(0).repeat(repeat_times,1).view(-1)
-        # f_ind1 = torch.tensor([random.randint(0, self.sum[d_ind1[i]] % self.capacity) for i in range(mix_num)])
-        # f_ind1 = f_ind1.unsqueeze(0).repeat(repeat_times,1).view(-1)
-        # mu1 = self.mean_queue[d_ind1, f_ind1].unsqueeze(1)
-        # sig1 = self.sig_queue[d_ind1, f_ind1].unsqueeze(1)
-
-        # #### fuse all domains
-        # idxs = torch.tensor([[random.randint(0, self.sum[i] % self.capacity) for _ in range(B)]for i in range(self.num_domains)]).to(x.device)
-        # ratios = torch.rand([self.num_domains,B])
-        # ratios = ratios.softmax(dim=0).to(x.device)
-        # mu1 = torch.zeros([B,self.num_features], dtype=x.dtype).to(x.device)
-        # sig1 = torch.zeros([B,self.num_features], dtype=x.dtype).to(x.device)
-        # for i in range(self.num_domains):
-        #     mu1 = mu1 + self.mean_queue[i].index_select(0, idxs[i]) * ratios[i].unsqueeze(1)
-        #     sig1 = sig1 + self.sig_queue[i].index_select(0, idxs[i]) * ratios[i].unsqueeze(1)
-        # mu1 = mu1.unsqueeze(1) / self.num_domains
-        # sig1 = sig1.unsqueeze(1) / self.num_domains
-
-
-        # #### equal ratio of mu, sig formation (just one mu, sig)
-        # dom_list = list()
-        # for i in range(self.num_domains):
-        #     if self.sum[i] != 0:
-        #         dom_list.append(i)
-        # k_dom = random.randint(1, len(dom_list))
-        # dom_ind = random.choices(dom_list, k=k_dom)
-        # mu_, sig_ = torch.zeros_like(mu), torch.zeros_like(sig)
-        
-        # for d_ind in dom_ind:
-        #     f_ind = random.choice(range(0, min(self.sum[d_ind], self.capacity)))
-        #     mu_ = mu_ + self.mean_queue[d_ind, f_ind]
-        #     sig_ = sig_ + self.sig_queue[d_ind, f_ind]
-        # mu_, sig_ = mu_.detach() / k_dom, sig_.detach() / k_dom
-        # #### equal ratio of mu, sig formation (just one mu, sig)
-    
-        #### mixstyle like
-        mu_mix = mu*lmda + mu1 * (1-lmda)
-        sig_mix = sig*lmda + sig1 * (1-lmda)
 
         #### novel style enqueue
         sum = self.sum[-1] % self.syn_capacity
@@ -194,11 +144,6 @@ class DomainQueue(nn.Module):
             self.sig_queue[-1, sum:sum+B] = sig_mix.squeeze()
         self.sum[-1] = self.sum[-1] + int(B)
 
-        # # substitute (like AdaIN)
-        # return x_normed*sig1 + mu1
-
-        # mu_mix = mu2*lmda + mu1 * (1-lmda)
-        # sig_mix = sig2*lmda + sig1 * (1-lmda)
         return x_normed*sig_mix + mu_mix
 
 
