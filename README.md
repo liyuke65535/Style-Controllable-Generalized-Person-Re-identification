@@ -36,10 +36,10 @@ bash run.sh
 ## 6. Evaluation only
 ```
 # alter the trained path in config
-vim ./config/SHS_DSM_vit_b.yml
+vim ./config/SHS_DSM_vit.yml
 
 # evaluation
-python test.py --config ./config/SHS_DSM_vit_b.yml
+python test.py --config ./config/SHS_DSM_vit.yml
 ```
 ## Citation
 ```
