@@ -1,6 +1,5 @@
 # Style-Controllable-Generalized-Person-Re-identification
-This paper is accepted by ACM MM23.
-The paper will be published soon.
+The official repo for Style Controllable Generalized Person Re-identification [ACM MM 2023]
 
 Here are some instructions to run our code.
 Our code is based on [TransReID](https://github.com/damo-cv/TransReID), thanks for their excellent work.
