@@ -3,7 +3,7 @@ This paper is accepted by ACM MM23.
 The paper will be published soon.
 
 Here are some instructions to run our code.
-Our code is based on [TransReID](https://github.com/damo-cv/TransReID), thanks for there excellent work.
+Our code is based on [TransReID](https://github.com/damo-cv/TransReID), thanks for their excellent work.
 
 ## 1. clone this repo
 ```
