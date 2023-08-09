@@ -1,5 +1,5 @@
 # Style-Controllable-Generalized-Person-Re-identification
-The official repo for Style Controllable Generalized Person Re-identification [ACM MM 2023]
+[ACM MM 2023] Style Controllable Generalized Person Re-identification
 
 Here are some instructions to run our code.
 Our code is based on [TransReID](https://github.com/damo-cv/TransReID), thanks for their excellent work.
