@@ -43,3 +43,11 @@ python test.py --config ./config/SHS_DSM_vit.yml
 ```
 ## Citation
 ```
+@article{Li2023StyleControllableGP,
+  title={Style-Controllable Generalized Person Re-identification},
+  author={Yuke Li and Jingkuan Song and Hao Ni and Heng Tao Shen},
+  journal={Proceedings of the 31st ACM International Conference on Multimedia},
+  year={2023},
+  url={https://api.semanticscholar.org/CorpusID:264492134}
+}
+```
