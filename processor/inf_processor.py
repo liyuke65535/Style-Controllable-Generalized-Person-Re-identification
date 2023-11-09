@@ -48,3 +48,33 @@ def do_inference(cfg,
         logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc[r - 1]))
     logger.info("total inference time: {:.2f}".format(time.time() - t0))
     return cmc, mAP
+
+def do_inference_multi_targets(cfg,
+                 model,
+                 logger):
+
+    cmc_all, mAP_all = [0 for i in range(50)], 0
+    for testname in cfg.DATASETS.TEST:
+        cmc_avg, mAP_avg = [0 for i in range(50)], 0
+        for split_id in range(10):
+            if testname == 'DG_VIPeR':
+                split_id = 'split_{}a'.format(split_id+1)
+            val_loader, num_query = build_reid_test_loader(cfg, testname, opt=split_id)
+            cmc, mAP = do_inference(cfg, model, val_loader, num_query, False)
+            cmc_avg += cmc
+            mAP_avg += mAP
+        cmc_avg /= 10
+        mAP_avg /= 10
+        cmc_all += cmc_avg
+        mAP_all += mAP_avg
+        logger.info("===== Avg Results for 10 splits of {} =====".format(testname))
+        logger.info("mAP: {:.1%}".format(mAP_avg))
+        for r in [1, 5, 10]:
+            logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc_avg[r - 1]))
+
+    logger.info("===== Mean Results on 4 target datasets =====")
+    logger.info("mAP: {:.1%}".format(mAP_all / len(cfg.DATASETS.TEST)))
+    for r in [1, 5, 10]:
+            logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc_all[r - 1] / len(cfg.DATASETS.TEST)))
+
+    return cmc_all, mAP_all
