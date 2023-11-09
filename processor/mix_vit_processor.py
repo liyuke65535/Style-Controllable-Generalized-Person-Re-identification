@@ -210,8 +210,9 @@ def mix_vit_do_train_with_amp(cfg,
     eval_model = make_model(cfg, modelname=cfg.MODEL.NAME, num_class=0)
     eval_model.load_param(load_path)
     logger.info('load weights from best.pth')
-    for testname in cfg.DATASETS.TEST:
-        if 'ALL' in testname:
-            testname = 'DG_' + testname.split('_')[1]
-        val_loader, num_query = build_reid_test_loader(cfg, testname)
-        do_inference(cfg, eval_model, val_loader, num_query)
+    if 'DG' in cfg.DATASETS.TEST[0]:
+        do_inference_multi_targets(cfg, model, logger)
+    else:
+        for testname in cfg.DATASETS.TEST:
+            val_loader, num_query = build_reid_test_loader(cfg, testname)
+            do_inference(cfg, model, val_loader, num_query)
