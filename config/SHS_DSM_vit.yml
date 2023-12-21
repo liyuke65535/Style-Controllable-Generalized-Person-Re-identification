@@ -1,12 +1,12 @@
 MODEL:
   PRETRAIN_CHOICE: 'imagenet' # imagenet
-  PRETRAIN_PATH: "/home/nihao/data/checkpoints" # root of pretrain path
-  METRIC_LOSS_TYPE: 'triplet_center' # triplet, triplet_center
+  PRETRAIN_PATH: "/home/liyuke/checkpoints" # root of pretrain path
+  METRIC_LOSS_TYPE: 'triplet' # triplet, triplet_center
   DIM: 768
   IF_LABELSMOOTH: 'on'
   NAME: 'mix_vit' # vit, resnet50, mix_vit, mix_resnet, mix_ibnnet50a, mix_ibnnet50b
   NO_MARGIN: True
-  DEVICE_ID: ('2')
+  DEVICE_ID: ('0')
   TRANSFORMER_TYPE: 'vit_base_patch16_224_TransReID'
   STRIDE_SIZE: 16
   DROP_PATH: 0.1

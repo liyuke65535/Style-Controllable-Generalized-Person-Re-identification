@@ -20,7 +20,8 @@ from .common import CommDataset
 from .datasets import DATASET_REGISTRY
 from .transforms import build_transforms
 
-_root = os.getenv("REID_DATASETS", "/home/nihao/data")
+# export REID_DATASETS="/xxx/xxx"
+# _root = os.getenv("REID_DATASETS", "/home/liyuke/data")
 
 
 def build_reid_train_loader(cfg):
@@ -41,6 +42,7 @@ def build_reid_train_loader(cfg):
     # load datasets
     train_pids = []
     domain_names = []
+    _root = cfg.DATASETS.ROOT_DIR
     for d in cfg.DATASETS.TRAIN:
         if d == 'CUHK03_NP':
             dataset = DATASET_REGISTRY.get('CUHK03')(root=_root, cuhk03_labeled=False)
@@ -93,7 +95,7 @@ def build_reid_train_loader(cfg):
 
 def build_reid_test_loader(cfg, dataset_name, opt=None, flag_test=True, shuffle=False, only_gallery=False, only_query=False, eval_time=False, bs=None):
     test_transforms = build_transforms(cfg, is_train=False)
-
+    _root = cfg.DATASETS.ROOT_DIR
     if opt is None:
         dataset = DATASET_REGISTRY.get(dataset_name)(root=_root)
         if comm.is_main_process():
