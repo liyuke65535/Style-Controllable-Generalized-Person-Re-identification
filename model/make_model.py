@@ -475,7 +475,7 @@ class build_mix_vit(nn.Module):
                 if i not in domains:
                     cls_score_.append(None)
                     continue
-                idx = torch.nonzero(domains==i).squeeze()
+                idx = torch.nonzero(domains==i).squeeze(1)
                 cls_score_.append(self.classifiers[i](feat[idx]))
             return cls_score, global_feat, labels, cls_score_
 

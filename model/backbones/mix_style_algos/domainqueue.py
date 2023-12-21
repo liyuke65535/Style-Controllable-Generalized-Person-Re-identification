@@ -130,6 +130,8 @@ class DomainQueue(nn.Module):
         f_ind1 = torch.tensor([random.randint(0, ranges[i]) for i in range(B)])
         mu1 = self.mean_queue[d_ind1, f_ind1].unsqueeze(1)
         sig1 = self.sig_queue[d_ind1, f_ind1].unsqueeze(1)
+        mu_mix = mu*lmda + mu1 * (1-lmda)
+        sig_mix = sig*lmda + sig1 * (1-lmda)
 
         #### novel style enqueue
         sum = self.sum[-1] % self.syn_capacity
